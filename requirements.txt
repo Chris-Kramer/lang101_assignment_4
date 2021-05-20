@@ -1,0 +1,10 @@
+setuptools
+wheel
+pandas
+tqdm
+spacy
+networkx
+matplotlib
+pathlib
+argparse
+pygraphviz
