@@ -37,7 +37,7 @@ bash run-script_assignment4-cmk.sh
 ```
 
 ### Running on windows  
-I have not been able to make this script work on windows. The problem is Pygraphviz, which is, to put it mildly, a pain in the … neck to install on windows. If you wish to run it from windows, you should create a virtual environment, install dependencies (requirements.txt and SpaCy’s en_core_web_sm NLP model), and then run the script manually from the src folder. However, installing pygraphviz can be a hassle, and you might need to install that library (and its dependencies) manually, and then remove it from the requirements file. 
+I have not been able to make this script work on windows. The problem is Pygraphviz, which is, to put it mildly, a pain in the … neck to install on windows. If you wish to run it from windows, you should create a virtual environment, install dependencies (requirements.txt and SpaCy’s [en_core_web_sm NLP model](https://spacy.io/models/en)), and then run the script manually from the src folder. However, installing pygraphviz can be a hassle, and you might need to install that library (and its dependencies) manually, and then remove it from the requirements file. 
 
 ### Output
 The output is a visualization of the network, which can be found in the viz folder, and a CSV file with centrality measures, which can be found in the output folder.   
@@ -74,14 +74,14 @@ bash run-script_create_edgelist.sh --input_file input.txt --output_edgelist name
 The scrip can create an edgelist from either a directory of txt-files, a txt-file or a csv-file with a column called "text". The input must be located in the folder "data/raw_data".  
 
 ### Running on windows
-If you want to run this script on windows, you must remove the last two lines in the requirements.txt (unless you have managed to install pygraphviz and graphviz). Then create a virtual environment, activate it, install dependencies (requirements.txt and SpaCy’s en_core_web_sm NLP model), then run the script create_edgelist.py from the src folder.  
+If you want to run this script on windows, you must remove the last two lines in the requirements.txt (unless you have managed to install pygraphviz and graphviz). Then create a virtual environment, activate it, install dependencies (requirements.txt and SpaCy’s [en_core_web_sm NLP model](https://spacy.io/models/en)), then run the script create_edgelist.py from the src folder.  
 
 ### Output  
 The output is an edgelist, which can be found in the folder data/edgelists.  
 
 ### Parameters
-The bash scrip _run-script_create_edgelist.sh_ takes the following parameters:  
-- `--input_file` This is the path to the txt-file, the csv-file or the directory of txt-files. It must be located in the folder "data/raw_data". So, if you wish to use a file from the corpus, you must move it to the correct directory (in this case the parent directory) first.  
+The bash script _run-script_create_edgelist.sh_ takes the following parameters:  
+- `--input_file` This is the name of the txt-file, the csv-file or the directory of txt-files to be used as edgelist. It must be located in the folder "data/raw_data". So, if you wish to use a file from the corpus, you must move it to the correct directory (in this case the parent directory) first.  
     - Default = NO DEFAULT    
 - `--label` The Entity label you wish to use as nodes. These labels come from SpaCy's library and can be found here https://spacy.io/models/en.  
     - Default = PERSON  
