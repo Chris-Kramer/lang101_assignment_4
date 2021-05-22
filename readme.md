@@ -39,7 +39,7 @@ bash run-script_assignment4-cmk.sh
 ### Running on windows  
 I have not been able to make this script work on windows. The problem is Pygraphviz, which is, to put it mildly, a pain in the … neck to install on windows. If you wish to run it from windows, you should create a virtual environment, install dependencies (requirements.txt and SpaCy’s en_core_web_sm NLP model), and then run the script manually from the src folder. However, installing pygraphviz can be a hassle, and you might need to install that library (and its dependencies) manually, and then remove it from the requirements file. 
 
-### output
+### Output
 The output is a visualization of the network, which can be found in the viz folder, and a CSV file with centrality measures, which can be found in the output folder.   
 
 ### Parameters  
