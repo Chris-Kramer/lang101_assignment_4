@@ -2,27 +2,39 @@
 
 VENVNAME=as4-venv #Environment name
 
-# Create and activate environment
 echo "Creating environment"
-python3 -m venv $VENVNAME
+python -m venv $VENVNAME
 
-source $VENVNAME/bin/activate
+# This makes sure that the bash script can be run from bash emulator on windows 
+# Test if the folder bin in venvname exists
+if [ -d "$VENVNAME/bin" ]
+
+    then
+        source $VENVNAME/bin/activate
+        echo "Building venv for Linux/Mac ..."
+    
+    else
+        source $VENVNAME/Scripts/activate
+        echo "Building venv for Windows ..."
+fi
 
 # Upgrade pip
-echo "Upgrading pip"
-pip install --upgrade pip
 
-#Test and install requirements
-test -f requirements.txt && pip install -r requirements.txt
+# I'm specifying that I'm using pip from python, since my pc have problems upgrading pip locally if I don't do it.
+python -m pip install --upgrade pip
+
+# Test if requirements exist and install it
+test -f requirements.txt && python -m pip install -r requirements.txt
+
 
 # Download en_core_web nlp model
 python -m spacy download en_core_web_sm
 
-#Move to src folder
+# Move to src folder
 cd src
 
 echo "running script"
-python3 create_edgelist.py $@
+python create_edgelist.py $@
 
 echo "deactivating and removing environment"
 deactivate

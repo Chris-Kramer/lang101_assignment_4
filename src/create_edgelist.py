@@ -1,9 +1,11 @@
+#!/usr/bin/env python
 """
 ----------- Import libs ------------
 """
 #System tools
 import os
 import sys
+from pathlib import Path
 sys.path.append(os.path.join(".."))
 
 #Arparse
@@ -12,6 +14,9 @@ import argparse
 
 #Homebrewed functions
 import utils.network_utils as nu
+
+#data processeing
+import pandas as pd
 
 #Regex
 import re
@@ -80,27 +85,32 @@ def main():
     output_csv = os.path.join("..", "data", "raw_data", str(re.findall("[^\.]+", args["input_file"])[0]) + ".csv")
     #If input is a txt file
     if input_file.endswith(".txt"):
-        print("Creating csv-file from txt-file ...")
-        nu.txt_to_csv(input_file, output_csv)
+        print("Creating edgelist from txt-file ...")
+        df = nu.txt_to_df(input_file)
+        nu.create_edgelist(df, output_edgelist, label)
+        
     #Else if input is a directory    
     elif os.path.isdir(input_file):
-        print("Creating csv-file from dir ...")
-        nu.dir_to_csv(input_file, output_csv)
+        print("Creating edgelist from directory ...")
+        
+        df = pd.DataFrame(columns = ["title", "text"])
+        for file_name in Path(input_file).glob("*.txt"):
+            df_txt = nu.txt_to_df(str(file_name)) 
+            df = df.append(df_txt, ignore_index = True)
+        
+        nu.create_edgelist(df, output_edgelist, label)
+            
     #Else if input file is a csv file
     elif input_file.endswith(".csv"):
-        print("Creating edgelist ...")
-        nu.create_edgelist(input_file, output_edgelist, label)
+        df = pd.read_csv(input_file)
+        print("Creating edgelist from csv...")
+        nu.create_edgelist(df, output_edgelist, label)
         sys.exit()
+        
     #If input is neither a txt, csv or dir
     else:
         print("The input must be a txt file, a csv file or a directory of txt files")
         sys.exit()
-    """
-    ---------- Create edgelist ----------
-    """
-    print("Creating edgelist ...")
-    #Create edgelist
-    nu.create_edgelist(output_csv, output_edgelist, label)
     
 #Define behaviour when called from commandline
 if __name__=="__main__":

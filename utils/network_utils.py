@@ -9,57 +9,41 @@ import csv
 import pandas as pd
 from collections import Counter
 from itertools import combinations 
-
+from tqdm import tqdm
 import spacy
 nlp = spacy.load("en_core_web_sm")
-
-"""
-------------- Make a csv file from a directory of txt files--------------
-"""
-def dir_to_csv(directory, output):
-    #Write csv file
-    with open(output, mode = "w") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=["title", "text"])
-        writer.writeheader()
-        # For each file
-        for file_name in Path(directory).glob("*.txt"):
-            #Find its title
-            title = re.findall(r"(?!.*/).*txt", str(file_name))
-            #Open file
-            with open(file_name, "r", encoding = "utf-8") as file:
-                #Read file
-                text = file.read()
-            #add row with filename and text
-            writer.writerow({"title":title[0], "text": text })
             
 """
-------------- Make a csv file from a txt file--------------
+------------- Make a df from a txt file--------------
 """
         
-def txt_to_csv(txt_file, output_file):
-    #Write csv
-    with open(output_file, mode = "w") as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=["title", "text"])
-        writer.writeheader()
-        #find title
+def txt_to_df(txt_file):
+    
+    df = pd.DataFrame(columns = ["title", "text"])    
+    # Open txt file
+    with open(txt_file, "r", encoding = "utf-8") as file:
+        #Read file
+        text = file.read()
+        #Get title
         title = re.findall(r"(?!.*/).*txt", txt_file)
-        # Open txt file
-        with open(txt_file, "r", encoding = "utf-8") as file:
-            #Read file
-            text = file.read()
-            #Add row with title and text
-            writer.writerow({"title":title[0], "text": text })
+        #create row and append it
+        df_row = {"title": title, "text": text}
+        df = df.append(df_row, ignore_index = True)
+        
+    return df
 
 """
-------------- Create csv_file with edgelist, from a csv_file of text--------------
+------------- Create csv_file with edgelist from a df--------------
 """
             
-def create_edgelist(csv_file, output_dest, entity_label, batch = 500): 
-    #read data
-    data = pd.read_csv(csv_file)["text"]
+def create_edgelist(data, output_dest, entity_label, batch = 500): 
+    #filter data
+    data = data["text"]
+    
     #List of text_entities
+    print("Getting Named entities ...")
     text_entities = []
-    for text in data:
+    for text in tqdm(data): #Plus one since range doesn't indluce last value
         #skip entries that aren't a string
         if isinstance(text, str) == False:
             print(f"{text} is not a string... skipping it...")
@@ -79,8 +63,9 @@ def create_edgelist(csv_file, output_dest, entity_label, batch = 500):
         text_entities.append(tmp_entities)
 
     edgelist = []
+    print("creating edgelist ...")
     # iterate over every document
-    for text in text_entities:
+    for text in tqdm(text_entities):
         # use itertools.combinations() to create edgelist
         edges = list(combinations(text, 2))
         # for each combination - i.e. each pair of 'nodes'
@@ -89,8 +74,9 @@ def create_edgelist(csv_file, output_dest, entity_label, batch = 500):
             edgelist.append(tuple(sorted(edge)))
         
     # Count edges
+    print("Counting edges ...")
     counted_edges = []
-    for key, value in Counter(edgelist).items():
+    for key, value in tqdm(Counter(edgelist).items()):
         source = key[0]
         target = key[1]
         weight = value
