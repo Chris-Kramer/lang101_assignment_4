@@ -33,8 +33,7 @@ def main():
                                  "[INFO] Can take a directory of txt files as input \n"
                                  "[INFO] Can take a csv file with a column called 'text' as input \n"
                                  "[INFO] Uses SpaCy's NER model for entity recognition \n"
-                                 "[INFO] The script will create an edgelist in the folder 'data/edgelists' \n"
-                                 "[INFO] If the input is .txt or folder with txt files the script will also create a csv-file with two columns (title and text) called 'input_file.csv' in the folder 'data/raw_data",
+                                 "[INFO] The script will create an edgelist in the folder 'data/edgelists' \n",
                                 formatter_class=RawTextHelpFormatter) 
     
     #input 
